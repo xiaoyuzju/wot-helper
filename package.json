@@ -1,0 +1,26 @@
+{
+  "name": "koishi-plugin-wot-helper",
+  "description": "wot helper plugin for koishi",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "plugin"
+  ],
+  "peerDependencies": {
+    "koishi": "^4.18.0"
+  },
+  "koishi": {
+    "preview": "true"
+  },
+  "dependencies": {
+    "@cordisjs/plugin-http": "^0.6.2"
+  }
+}
