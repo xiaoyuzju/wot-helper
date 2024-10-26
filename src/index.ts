@@ -57,7 +57,7 @@ export function apply(ctx: Context, config: Config) {
   )
   // }
 
-  ctx.command('recents [region] [wot_nickname] 查询近期战绩')
+  ctx.command('recents [region] [wot_nickname]', '查询近期战绩')
     .action(async ({ session }, region, wot_nickname) => {
       if (!region && !wot_nickname) {
         const current_user = await ctx.database.get('wot_user', { user_id: [session.userId] })
@@ -102,7 +102,7 @@ export function apply(ctx: Context, config: Config) {
       console.log(`done ${wot_account_id}`)
     });
 
-  ctx.command('bind <region> <wot_nickname> 绑定战绩查询')
+  ctx.command('bind <region> <wot_nickname>', '绑定战绩查询')
     .action(async ({ session }, region, wot_nickname) => {
       const current_user = await ctx.database.get('wot_user', { user_id: [session.userId] })
       if (current_user.length == 0) {
