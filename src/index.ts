@@ -81,13 +81,17 @@ export function apply(ctx: Context, config: Config) {
       const wot_account_data = JSON.parse(JSON.stringify(await http.get(wot_account_url)))
       // {"status":"ok","meta":{"count":1},"data":[{"nickname":"RTCrush","account_id":2025063035}]}
       if (wot_account_data['meta']['count'] === 0) {
-        await session.send(h('at', { id: session.userId }) + ` 未找到 ${wot_nickname} 的战绩`)
+        await session.send(h('at', { id: session.userId }) + ` 未找到 ${wot_nickname} 的坦克世界账号`)
         return
       }
       const wot_account_id = wot_account_data['data'][0]['account_id']
       console.log(`wot_account_id: ${wot_account_id}`)
       const tomato_url = `https://api.tomato.gg/dev/api-v2/player/recents/${region_domain}/${wot_account_id}?cache=false&days=1,3,7,30,60&battles=1000,100`
       const tomato_recents_data = JSON.parse(JSON.stringify(await http.get(tomato_url)))
+      if (tomato_recents_data['meta']['status']!== 'good') {
+        await session.send(h('at', { id: session.userId }) + ` 未找到 ${wot_nickname} 的近期战绩，请前往 tomato.gg 查看`)
+        return
+      }
 
       let tomato_recents_str = h('at', { id: session.userId }) + ` ${region} ${wot_nickname}\n`
       for (const day of ['1', '3', '7', '30', '60']) {
@@ -119,3 +123,5 @@ export function apply(ctx: Context, config: Config) {
       await session.send(h('at', { id: session.userId }) + ` 已绑定 ${region} ${wot_nickname}`)
     });
 }
+
+// https://api.tomato.gg/dev/api-v2/player/overall/asia/2025063035
