@@ -108,6 +108,14 @@ export function apply(ctx: Context, config: Config) {
 
   ctx.command('bind <region> <wot_nickname>', '绑定战绩查询')
     .action(async ({ session }, region, wot_nickname) => {
+      if (!region || !wot_nickname) {
+        await session.send('请提供地区和账号')
+        return
+      }
+      if (!RegionDomain[region]) {
+        await session.send(`不支持的地区 ${region}`)
+        return
+      }
       const current_user = await ctx.database.get('wot_user', { user_id: [session.userId] })
       if (current_user.length == 0) {
         console.log(`create user ${session.userId} ${wot_nickname} ${region}`)
@@ -117,8 +125,8 @@ export function apply(ctx: Context, config: Config) {
           region: region,
         })
       } else {
-        console.log(`update user ${session.userId} ${wot_nickname} ${region}`)
-        await ctx.database.set('wot_user', current_user[0].user_id, { wot_nickname: wot_nickname, region: region })
+        console.log(`update id=${current_user[0].id} user_id=${session.userId} wot_nickname=${wot_nickname} region=${region}`)
+        await ctx.database.set('wot_user', current_user[0].id, { wot_nickname: wot_nickname, region: region })
       }
       await session.send(h('at', { id: session.userId }) + ` 已绑定 ${region} ${wot_nickname}`)
     });
